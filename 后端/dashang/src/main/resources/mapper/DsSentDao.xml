@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengzhuo.dashang.dao.DsSentDao">
+  <resultMap id="BaseResultMap" type="com.fengzhuo.dashang.pojo.entity.DsSent">
+    <id column="sent_id" jdbcType="INTEGER" property="sentId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="sent_theme" jdbcType="VARCHAR" property="sentTheme" />
+    <result column="sent_sender" jdbcType="VARCHAR" property="sentSender" />
+    <result column="sent_date" jdbcType="TIMESTAMP" property="sentDate" />
+    <result column="sent_recipient" jdbcType="VARCHAR" property="sentRecipient" />
+    <result column="sent_detial" jdbcType="VARCHAR" property="sentDetial" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    sent_id, user_id, sent_theme, sent_sender, sent_date, sent_recipient, sent_detial
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ds_sent
+    where sent_id = #{sentId,jdbcType=INTEGER}
+  </select>
+    <select id="selectSent" resultType="com.fengzhuo.dashang.pojo.entity.DsSent">
+      select <include refid="Base_Column_List"></include> from ds_sent
+      where user_id = #{userId}
+    </select>
+  <select id="selectSentNum" resultType="java.lang.Integer">
+        select count(*) from ds_sent
+        where ds_sent.user_id in (select user_id from ds_user where user_name=#{name})
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ds_sent
+    where sent_id = #{sentId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="sent_id" keyProperty="sentId" parameterType="com.fengzhuo.dashang.pojo.entity.DsSent" useGeneratedKeys="true">
+    insert into ds_sent (user_id, sent_theme, sent_sender, 
+      sent_date, sent_recipient, sent_detial
+      )
+    values (#{userId,jdbcType=INTEGER}, #{sentTheme,jdbcType=VARCHAR}, #{sentSender,jdbcType=VARCHAR}, 
+      #{sentDate,jdbcType=TIMESTAMP}, #{sentRecipient,jdbcType=VARCHAR}, #{sentDetial,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="sent_id" keyProperty="sentId" parameterType="com.fengzhuo.dashang.pojo.entity.DsSent" useGeneratedKeys="true">
+    insert into ds_sent
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="sentTheme != null">
+        sent_theme,
+      </if>
+      <if test="sentSender != null">
+        sent_sender,
+      </if>
+      <if test="sentDate != null">
+        sent_date,
+      </if>
+      <if test="sentRecipient != null">
+        sent_recipient,
+      </if>
+      <if test="sentDetial != null">
+        sent_detial,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="sentTheme != null">
+        #{sentTheme,jdbcType=VARCHAR},
+      </if>
+      <if test="sentSender != null">
+        #{sentSender,jdbcType=VARCHAR},
+      </if>
+      <if test="sentDate != null">
+        #{sentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sentRecipient != null">
+        #{sentRecipient,jdbcType=VARCHAR},
+      </if>
+      <if test="sentDetial != null">
+        #{sentDetial,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fengzhuo.dashang.pojo.entity.DsSent">
+    update ds_sent
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="sentTheme != null">
+        sent_theme = #{sentTheme,jdbcType=VARCHAR},
+      </if>
+      <if test="sentSender != null">
+        sent_sender = #{sentSender,jdbcType=VARCHAR},
+      </if>
+      <if test="sentDate != null">
+        sent_date = #{sentDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sentRecipient != null">
+        sent_recipient = #{sentRecipient,jdbcType=VARCHAR},
+      </if>
+      <if test="sentDetial != null">
+        sent_detial = #{sentDetial,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sent_id = #{sentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fengzhuo.dashang.pojo.entity.DsSent">
+    update ds_sent
+    set user_id = #{userId,jdbcType=INTEGER},
+      sent_theme = #{sentTheme,jdbcType=VARCHAR},
+      sent_sender = #{sentSender,jdbcType=VARCHAR},
+      sent_date = #{sentDate,jdbcType=TIMESTAMP},
+      sent_recipient = #{sentRecipient,jdbcType=VARCHAR},
+      sent_detial = #{sentDetial,jdbcType=VARCHAR}
+    where sent_id = #{sentId,jdbcType=INTEGER}
+  </update>
+</mapper>

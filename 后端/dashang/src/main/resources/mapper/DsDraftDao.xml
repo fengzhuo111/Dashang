@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengzhuo.dashang.dao.DsDraftDao">
+  <resultMap id="BaseResultMap" type="com.fengzhuo.dashang.pojo.entity.DsDraft">
+    <id column="draft_id" jdbcType="INTEGER" property="draftId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="draft_theme" jdbcType="VARCHAR" property="draftTheme" />
+    <result column="draft_sender" jdbcType="VARCHAR" property="draftSender" />
+    <result column="draft_date" jdbcType="TIMESTAMP" property="draftDate" />
+    <result column="draft_recipient" jdbcType="VARCHAR" property="draftRecipient" />
+    <result column="draft_detial" jdbcType="VARCHAR" property="draftDetial" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    draft_id, user_id, draft_theme, draft_sender, draft_date, draft_recipient, draft_detial
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ds_draft
+    where draft_id = #{draftId,jdbcType=INTEGER}
+  </select>
+  <select id="selectDraftNum" resultType="java.lang.Integer">
+        select count(*) from ds_draft
+        where ds_draft.user_id in (select user_id from ds_user where user_name=#{name})
+  </select>
+  <select id="selectDraft" resultType="com.fengzhuo.dashang.pojo.entity.DsDraft">
+    select <include refid="Base_Column_List"></include> from ds_draft
+    where user_id = #{userId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ds_draft
+    where draft_id = #{draftId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="draft_id" keyProperty="draftId" parameterType="com.fengzhuo.dashang.pojo.entity.DsDraft" useGeneratedKeys="true">
+    insert into ds_draft (user_id, draft_theme, draft_sender, 
+      draft_date, draft_recipient, draft_detial
+      )
+    values (#{userId,jdbcType=INTEGER}, #{draftTheme,jdbcType=VARCHAR}, #{draftSender,jdbcType=VARCHAR}, 
+      #{draftDate,jdbcType=TIMESTAMP}, #{draftRecipient,jdbcType=VARCHAR}, #{draftDetial,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" keyColumn="draft_id" keyProperty="draftId" parameterType="com.fengzhuo.dashang.pojo.entity.DsDraft" useGeneratedKeys="true">
+    insert into ds_draft
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="draftTheme != null">
+        draft_theme,
+      </if>
+      <if test="draftSender != null">
+        draft_sender,
+      </if>
+      <if test="draftDate != null">
+        draft_date,
+      </if>
+      <if test="draftRecipient != null">
+        draft_recipient,
+      </if>
+      <if test="draftDetial != null">
+        draft_detial,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="draftTheme != null">
+        #{draftTheme,jdbcType=VARCHAR},
+      </if>
+      <if test="draftSender != null">
+        #{draftSender,jdbcType=VARCHAR},
+      </if>
+      <if test="draftDate != null">
+        #{draftDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="draftRecipient != null">
+        #{draftRecipient,jdbcType=VARCHAR},
+      </if>
+      <if test="draftDetial != null">
+        #{draftDetial,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fengzhuo.dashang.pojo.entity.DsDraft">
+    update ds_draft
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="draftTheme != null">
+        draft_theme = #{draftTheme,jdbcType=VARCHAR},
+      </if>
+      <if test="draftSender != null">
+        draft_sender = #{draftSender,jdbcType=VARCHAR},
+      </if>
+      <if test="draftDate != null">
+        draft_date = #{draftDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="draftRecipient != null">
+        draft_recipient = #{draftRecipient,jdbcType=VARCHAR},
+      </if>
+      <if test="draftDetial != null">
+        draft_detial = #{draftDetial,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where draft_id = #{draftId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fengzhuo.dashang.pojo.entity.DsDraft">
+    update ds_draft
+    set user_id = #{userId,jdbcType=INTEGER},
+      draft_theme = #{draftTheme,jdbcType=VARCHAR},
+      draft_sender = #{draftSender,jdbcType=VARCHAR},
+      draft_date = #{draftDate,jdbcType=TIMESTAMP},
+      draft_recipient = #{draftRecipient,jdbcType=VARCHAR},
+      draft_detial = #{draftDetial,jdbcType=VARCHAR}
+    where draft_id = #{draftId,jdbcType=INTEGER}
+  </update>
+</mapper>

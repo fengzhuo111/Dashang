@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengzhuo.dashang.dao.DsInboxDao">
+  <resultMap id="BaseResultMap" type="com.fengzhuo.dashang.pojo.entity.DsInbox">
+    <id column="mail_id" jdbcType="INTEGER" property="mailId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="mail_theme" jdbcType="VARCHAR" property="mailTheme" />
+    <result column="mail_sender" jdbcType="VARCHAR" property="mailSender" />
+    <result column="mail_date" jdbcType="TIMESTAMP" property="mailDate" />
+    <result column="mail_type" jdbcType="INTEGER" property="mailType" />
+    <result column="mail_recipient" jdbcType="VARCHAR" property="mailRecipient" />
+    <result column="mail_detial" jdbcType="VARCHAR" property="mailDetial" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    mail_id, user_id, mail_theme, mail_sender, mail_date, mail_type, mail_recipient, 
+    mail_detial
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ds_inbox
+    where mail_id = #{mailId,jdbcType=INTEGER}
+  </select>
+  <select id="selectUnReadNum" resultType="java.lang.Integer">
+        select count(*) from ds_inbox
+        where ds_inbox.user_id in (select user_id from ds_user where user_name=#{name})
+        and ds_inbox.mail_type=1
+  </select>
+    <select id="selectMailNum" resultType="java.lang.Integer">
+        select count(*) from ds_inbox
+        where ds_inbox.user_id in (select user_id from ds_user where user_name=#{name})
+    </select>
+  <select id="selectInbox" resultType="com.fengzhuo.dashang.pojo.entity.DsInbox">
+    select <include refid="Base_Column_List"></include> from ds_inbox
+    where user_id = #{userId}
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ds_inbox
+    where mail_id = #{mailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="mail_id" keyProperty="mailId" parameterType="com.fengzhuo.dashang.pojo.entity.DsInbox" useGeneratedKeys="true">
+    insert into ds_inbox (user_id, mail_theme, mail_sender, 
+      mail_date, mail_type, mail_recipient, 
+      mail_detial)
+    values (#{userId,jdbcType=INTEGER}, #{mailTheme,jdbcType=VARCHAR}, #{mailSender,jdbcType=VARCHAR}, 
+      #{mailDate,jdbcType=TIMESTAMP}, #{mailType,jdbcType=INTEGER}, #{mailRecipient,jdbcType=VARCHAR}, 
+      #{mailDetial,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="mail_id" keyProperty="mailId" parameterType="com.fengzhuo.dashang.pojo.entity.DsInbox" useGeneratedKeys="true">
+    insert into ds_inbox
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="mailTheme != null">
+        mail_theme,
+      </if>
+      <if test="mailSender != null">
+        mail_sender,
+      </if>
+      <if test="mailDate != null">
+        mail_date,
+      </if>
+      <if test="mailType != null">
+        mail_type,
+      </if>
+      <if test="mailRecipient != null">
+        mail_recipient,
+      </if>
+      <if test="mailDetial != null">
+        mail_detial,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="mailTheme != null">
+        #{mailTheme,jdbcType=VARCHAR},
+      </if>
+      <if test="mailSender != null">
+        #{mailSender,jdbcType=VARCHAR},
+      </if>
+      <if test="mailDate != null">
+        #{mailDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mailType != null">
+        #{mailType,jdbcType=INTEGER},
+      </if>
+      <if test="mailRecipient != null">
+        #{mailRecipient,jdbcType=VARCHAR},
+      </if>
+      <if test="mailDetial != null">
+        #{mailDetial,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fengzhuo.dashang.pojo.entity.DsInbox">
+    update ds_inbox
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="mailTheme != null">
+        mail_theme = #{mailTheme,jdbcType=VARCHAR},
+      </if>
+      <if test="mailSender != null">
+        mail_sender = #{mailSender,jdbcType=VARCHAR},
+      </if>
+      <if test="mailDate != null">
+        mail_date = #{mailDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mailType != null">
+        mail_type = #{mailType,jdbcType=INTEGER},
+      </if>
+      <if test="mailRecipient != null">
+        mail_recipient = #{mailRecipient,jdbcType=VARCHAR},
+      </if>
+      <if test="mailDetial != null">
+        mail_detial = #{mailDetial,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where mail_id = #{mailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fengzhuo.dashang.pojo.entity.DsInbox">
+    update ds_inbox
+    set user_id = #{userId,jdbcType=INTEGER},
+      mail_theme = #{mailTheme,jdbcType=VARCHAR},
+      mail_sender = #{mailSender,jdbcType=VARCHAR},
+      mail_date = #{mailDate,jdbcType=TIMESTAMP},
+      mail_type = #{mailType,jdbcType=INTEGER},
+      mail_recipient = #{mailRecipient,jdbcType=VARCHAR},
+      mail_detial = #{mailDetial,jdbcType=VARCHAR}
+    where mail_id = #{mailId,jdbcType=INTEGER}
+  </update>
+</mapper>

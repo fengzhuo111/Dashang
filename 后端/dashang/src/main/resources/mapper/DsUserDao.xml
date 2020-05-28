@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fengzhuo.dashang.dao.DsUserDao">
+  <resultMap id="BaseResultMap" type="com.fengzhuo.dashang.pojo.entity.DsUser">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_sex" jdbcType="VARCHAR" property="userSex" />
+    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="user_email" jdbcType="VARCHAR" property="userEmail" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, user_name, user_sex, user_password, user_email
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ds_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="selectUserByRealName" resultType="com.fengzhuo.dashang.pojo.entity.DsUser">
+    select <include refid="Base_Column_List"></include> from ds_user where user_name=#{name}
+  </select>
+  <select id="selectPasswordByName" resultType="java.lang.String">
+      select ds_user.user_password from ds_user where user_name=#{name}
+    </select>
+  <select id="selectUserID" resultType="java.lang.Integer">
+    select user_id from ds_user where user_name=#{name};
+  </select>
+  <select id="selectUserIdByEmail" resultType="java.lang.Integer">
+      select user_id from ds_user where user_email=#{email};
+    </select>
+    <select id="selectUserNameByEmail" resultType="java.lang.String">
+       select user_name from ds_user where user_email=#{email};
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ds_user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="user_id" keyProperty="userId" parameterType="com.fengzhuo.dashang.pojo.entity.DsUser" useGeneratedKeys="true">
+    insert into ds_user (user_name, user_sex, user_password, 
+      user_email)
+    values (#{userName,jdbcType=VARCHAR}, #{userSex,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR}, 
+      #{userEmail,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="user_id" keyProperty="userId" parameterType="com.fengzhuo.dashang.pojo.entity.DsUser" useGeneratedKeys="true">
+    insert into ds_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userSex != null">
+        user_sex,
+      </if>
+      <if test="userPassword != null">
+        user_password,
+      </if>
+      <if test="userEmail != null">
+        user_email,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userSex != null">
+        #{userSex,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null">
+        #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null">
+        #{userEmail,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fengzhuo.dashang.pojo.entity.DsUser">
+    update ds_user
+    <set>
+      <if test="userName != null">
+      user_name = #{userName,jdbcType=VARCHAR},
+    </if>
+      <if test="userSex != null">
+        user_sex = #{userSex,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null">
+        user_password = #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="userEmail != null">
+        user_email = #{userEmail,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.fengzhuo.dashang.pojo.entity.DsUser">
+    update ds_user
+    set user_name = #{userName,jdbcType=VARCHAR},
+      user_sex = #{userSex,jdbcType=VARCHAR},
+      user_password = #{userPassword,jdbcType=VARCHAR},
+      user_email = #{userEmail,jdbcType=VARCHAR}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+</mapper>
